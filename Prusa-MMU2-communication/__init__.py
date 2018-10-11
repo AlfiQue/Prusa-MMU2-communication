@@ -15,21 +15,21 @@ class OctoremotePlugin(octoprint.plugin.SettingsPlugin,
 					   octoprint.plugin.ShutdownPlugin):
 	##~~ SettingsPlugin mixin
 
-		def get_settings_defaults(self):
+	def get_settings_defaults(self):
 		return dict(
 			comport="COM3",
 			baudrate=115200,
 			baudrateOpt=[9600, 19200, 115200],
 		)
 
-			def get_config_vars(self):
+	def get_config_vars(self):
 		return dict(
 			comport=self._settings.get(["comport"]),
 			baudrate=self._settings.get(["baudrate"]),
 			baudrateOpt=self._settings.get(["baudrateOpt"]),
 		)
 		
-			def get_template_configs(self):
+	def get_template_configs(self):
 		return [
 			# dict(type="navbar", custom_bindings=False),
 			dict(type="settings", custom_bindings=False)
@@ -44,34 +44,24 @@ class OctoremotePlugin(octoprint.plugin.SettingsPlugin,
 	##~~ AssetPlugin mixin
 
 
-	def get_assets(self):
-		# Define your plugin's asset files to automatically include in the
-		# core UI here.
-		return dict(
-			js=["js/OctoRemote.js"],
-			css=["css/OctoRemote.css"],
-			less=["less/OctoRemote.less"]
-		)
-
 	##~~ Softwareupdate hook
-
 	def get_update_information(self):
 		# Define the configuration for your plugin to use with the Software Update
 		# Plugin here. See https://github.com/foosel/OctoPrint/wiki/Plugin:-Software-Update
 		# for details.
 		return dict(
 			OctoRemote=dict(
-				displayName="Octoremote Plugin",
+				displayName="Prusa MMU2 communication",
 				displayVersion=self._plugin_version,
 
 				# version check: github repository
 				type="github_release",
-				user="pkElectronics",
-				repo="OctoPrint-Octoremote",
+				user="AlfiQue",
+				repo="Prusa-MMU2-communication",
 				current=self._plugin_version,
 
 				# update method: pip
-				pip="https://github.com/pkElectronics/OctoPrint-Octoremote/archive/{target_version}.zip"
+				pip="https://github.com/AlfiQue/Prusa-MMU2-communication/archive/{target_version}.zip"
 			)
 		)
 
@@ -103,13 +93,6 @@ class OctoremotePlugin(octoprint.plugin.SettingsPlugin,
 		return self._logger
 
 	# serial.tools.list_ports listet alle comports auf
-	
-	
-	
-	
-	
-		
-from octoprint.printer.estimation import PrintTimeEstimator
 
 class GcodetransfertPlugin(Gcodetransfert):
 
@@ -122,6 +105,11 @@ class GcodetransfertPlugin(Gcodetransfert):
 			elif gcode == T4:
 			
 			
+
+
+
+
+
 			
 class SerialThread(Thread):
 	# Fixed responses
@@ -130,57 +118,13 @@ class SerialThread(Thread):
 
 	# comport parameters
 	portname = ""
-	baudrate = 9600
-
-	# thread parameters
-	interrupted = False
-
-	# msg parser vars
-	msgParsingState = 0
-	bytesRead = []
-	payload = []
-	countBytesRead = 0
-	ackPending = False
-
-	# printerSettings
-	movementOptions = [0.1, 1, 10, 100]
-	toolOptions = ["tool0", "tool1", "tool2", "tool3"]
-
-	movementIndex = 0
-	toolIndex = 0
-
-	#	comport = "COM3",#
-	# baudrate = 9600,
-	# extrusionAmount = 5,
-	# retractionamount = 5,
-	# numberOfTools = 3,
-	# movementSteps = [0.1, 1, 10, 100]
+	baudrate = 115200
 
 	def __init__(self, callbackClass, config):
 		Thread.__init__(self)
 		self.cbClass = callbackClass
 		self.portname = config["comport"]
 		self.baudrate = config["baudrate"]
-		self.toolcount = int(config["numberOfTools"])
-
-		self.userCommands = config["userCommands"]
-		self.userKeyModes = config["userKeyModes"]
-
-		if self.toolcount > 4:
-			callbackClass.getLogger().info("OctoRemote sanity check: Reverted Toolcount to 4, was" + self.toolcount)
-			self.toolcount = 4
-
-		self.extrusionAmount = config["extrusionAmount"]
-		self.retractionAmount = config["retractionAmount"]
-		self.movementOptions = config["movementSteps"]
-		try:
-			self.port = serial.Serial(self.portname, baudrate=self.baudrate, timeout=3.0)
-		except:
-			self.interrupt()
-			callbackClass.getLogger().error("Octoremote, could not open comport:" + self.portname)
-		callbackClass.getLogger().info("Octoremote Comthread started")
-		self.daemon = False
-		self.start()
 
 	def run(self):
 		self.cbClass.getLogger().info("Thread started")
