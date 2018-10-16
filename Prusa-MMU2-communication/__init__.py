@@ -79,6 +79,7 @@ class OctoremotePlugin(octoprint.plugin.SettingsPlugin,
 def gcodescan(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
 			if gcode == T0:
 				USB.write("T0")
+				#ok\n
 			elif gcode == T1:
 				USB.write("T1")
 			elif gcode == T2:
