@@ -80,16 +80,36 @@ def gcodescan(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs)
 			if gcode == T0:
 				USB.write("T0")
 				#ok\n
+				While (ack=="ok"):
+				ack=str(USB.readline())
+				print(ack)
 			elif gcode == T1:
 				USB.write("T1")
+				#ok\n
+				While (ack=="ok"):
+				ack=str(USB.readline())
+				print(ack)
 			elif gcode == T2:
 				USB.write("T2")
+				#ok\n
+				While (ack=="ok"):
+				ack=str(USB.readline())
+				print(ack)
 			elif gcode == T3:
 				USB.write("T3")
+				#ok\n
+				While (ack=="ok"):
+				ack=str(USB.readline())
+				print(ack)
 			elif gcode == T4:
 				USB.write("T4")
+				#ok\n
+				While (ack=="ok"):
+				ack=str(USB.readline())
+				print(ack)
 			
 			
+
 __plugin_name__ = "Prusa MMU2 communication"
 
 def __plugin_load__():
